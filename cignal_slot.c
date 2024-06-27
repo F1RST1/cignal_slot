@@ -1,35 +1,28 @@
 #include "cignal_slot.h"
+#include <string.h>
 
 #define MAX_CALLBACK_COUNT_FOR_ONE_CALLER 8
-#define MAX_SLOT_COUNT 64
+#define MAX_SIGNAL_COUNT 64
 
 typedef struct
 {
-    const char* name;
+    const char* signal_name;
     asignal_caller_t caller;
     aslot_callback_t cblist[MAX_CALLBACK_COUNT_FOR_ONE_CALLER];
 }sig_slots_t;
 
-sig_slots_t sig_slot_list[MAX_SLOT_COUNT] = {0};
+sig_slots_t sig_slot_list[MAX_SIGNAL_COUNT] = {0};
 
 
 
-void send_signal(asignal_caller_t caller)
+static int find_signal_by_fn(asignal_caller_t caller, int* if_found);
+void emit_signal(asignal_caller_t caller)
 {
     // iterate over the list, and find the caller
-    unsigned char if_found_caller;
-    size_t idx = 0;
-
-    for (size_t i = 0; i < MAX_SLOT_COUNT; i++)
-    {
-        if_found_caller = sig_slot_list[i].caller == caller;
-        if (!if_found_caller)
-        {
-            continue;
-        }
-        idx = i;
-        break;
-    }
+    int if_found_caller;
+    int idx = 0;
+    
+    idx = find_signal_by_fn(caller, &if_found_caller);
 
     if (!if_found_caller)
     {
@@ -44,18 +37,75 @@ void send_signal(asignal_caller_t caller)
         {
             continue;
         }
-        sigslot->caller(sig_slot_list->cblist[i]);
+        sigslot->caller(sigslot->cblist[i]);
     }
 }
 
 
-void add_signal(const char* name, asignal_caller_t caller)
+void create_signal(const char* signal_name, asignal_caller_t caller)
 {
-    sig_slot_list[0].name = name;
-    sig_slot_list[0].caller = caller;
+    for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
+    {
+        if (sig_slot_list[i].signal_name)
+        {
+            continue;
+        }
+        sig_slot_list[i].signal_name = signal_name;
+        sig_slot_list[i].caller = caller;
+    }
 }
 
-void add_slot(const char* name, aslot_callback_t callback)
+static int find_signal_by_name(const char* signal_name, int* if_found);
+void attach_slot_to(const char* signal_name, aslot_callback_t callback)
 {
-    sig_slot_list[0].cblist[0] = callback;
+    int if_found = 0;
+    int idx = find_signal_by_name(signal_name, &if_found);
+
+    if (!if_found)
+    {
+        return;
+    }
+
+    // iterate over the callback list
+    sig_slots_t *sigslot = &(sig_slot_list[idx]);
+    for (size_t i = 0; i < MAX_CALLBACK_COUNT_FOR_ONE_CALLER; i++)
+    {
+        if (sigslot->cblist[i])
+        {
+            continue;
+        }
+        sigslot->cblist[i] = callback;
+        break;
+    }
+
+}
+
+
+static int find_signal_by_name(const char* signal_name, int* if_found)
+{
+    *if_found = 0;
+    for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
+    {
+        if (strcmp(signal_name, sig_slot_list[i].signal_name) == 0)
+        {
+            *if_found = 1;
+            return i;
+        }
+    }
+    return 0;
+}
+
+
+static int find_signal_by_fn(asignal_caller_t caller, int* if_found)
+{
+    *if_found = 0;
+    for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
+    {
+        if (sig_slot_list[i].caller == caller)
+        {
+            *if_found = 1;
+            return i;
+        }
+    }
+    return 0;
 }

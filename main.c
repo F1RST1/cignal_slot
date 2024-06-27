@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include "cignal_slot.h"
 
-void __caller(aslot_callback_t callback)
+void __caller(aslot_callback_t slot)
 {
     static int x = 30;
-    callback(&x);
+    slot(&x);
 }
 
 
-void recv(void* payload)
+void callback_on_happened(void* payload)
 {
     int* _int = (int*)payload;
     printf("recv:%d\r\n", *_int);
@@ -16,9 +16,9 @@ void recv(void* payload)
 
 int main(int argc, char const *argv[])
 {
-    add_signal("mycaller", __caller);
-    add_slot("mycaller", recv);
+    create_signal("mycaller", __caller);
+    attach_slot_to("mycaller", callback_on_happened);
 
-    send_signal(__caller);
+    emit_signal(__caller);
     return 0;
 }
