@@ -97,6 +97,10 @@ static int find_signal_by_name(const char* signal_name, int* if_found)
     *if_found = 0;
     for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
     {
+        if (!sig_slot_list[i].signal_name)
+        {
+            continue;
+        }
         if (strcmp(signal_name, sig_slot_list[i].signal_name) == 0)
         {
             *if_found = 1;
