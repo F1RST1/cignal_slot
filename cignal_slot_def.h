@@ -1,0 +1,9 @@
+#ifndef _CIGNAL_SLOT_DEF_H_
+#define _CIGNAL_SLOT_DEF_H_
+
+
+#define MAX_CALLBACK_COUNT_FOR_ONE_CALLER 8
+#define MAX_SIGNAL_COUNT 64
+
+
+#endif // !_CIGNAL_SLOT_DEF_H_

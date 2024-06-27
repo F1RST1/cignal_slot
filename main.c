@@ -17,7 +17,7 @@ void callback_on_happened(void* payload)
 int main(int argc, char const *argv[])
 {
     create_signal("mycaller", __caller);
-    attach_slot_to("mycaller", callback_on_happened);
+    connect_slot_to("mycaller", callback_on_happened);
 
     emit_signal(__caller);
     return 0;
