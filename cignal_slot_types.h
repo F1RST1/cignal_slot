@@ -4,7 +4,7 @@
 #include "cignal_slot_def.h"
 
 // closure might be better
-typedef void(*aslot_callback_t)(void* context);
+typedef void(*aslot_callback_t)(...);
 typedef void(*asignal_caller_t)(aslot_callback_t callback);
 
 
