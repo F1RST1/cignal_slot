@@ -1,7 +1,8 @@
 #include "cignal_slot.h"
 #include <string.h>
 
-
+#define USE_ARRAY
+// #define USE_LINKED_LIST
 
 sig_slots_t sig_slot_list[MAX_SIGNAL_COUNT] = {0};
 
