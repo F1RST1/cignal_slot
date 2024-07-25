@@ -1,9 +1,15 @@
 #ifndef _CIGNAL_SLOT_DEF_H_
 #define _CIGNAL_SLOT_DEF_H_
 
+#define USE_ARRAY
+// #define USE_LINKED_LIST
 
-#define MAX_CALLBACK_COUNT_FOR_ONE_CALLER 8
 #define MAX_SIGNAL_COUNT 64
+
+#ifdef USE_ARRAY
+#define MAX_CALLBACK_COUNT_FOR_ONE_CALLER 8
+#endif // USE_ARRAY
+
 
 
 #endif // !_CIGNAL_SLOT_DEF_H_

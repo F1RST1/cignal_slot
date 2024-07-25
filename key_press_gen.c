@@ -48,15 +48,15 @@ void ac_eco_long(aslot_callback_t callback)
 
 static void key_press_gen_initialize(void)
 {
-    create_signal("power_key_clicked", power_key_clicked);
-    create_signal("power_key_long", power_key_long);
-    create_signal("light_key_clicked", light_key_clicked);
-    create_signal("ac_key_clicked", ac_key_clicked);
-    create_signal("ac_key_long", ac_key_long);
-    create_signal("dc_key_clicked", dc_key_clicked);
-    create_signal("usb_key_clicked", usb_key_clicked);
-    create_signal("eco_key_clicked", eco_key_clicked);
-    create_signal("ac_eco_long", ac_eco_long);
+    use_array_create_signal("power_key_clicked", power_key_clicked);
+    use_array_create_signal("power_key_long", power_key_long);
+    use_array_create_signal("light_key_clicked", light_key_clicked);
+    use_array_create_signal("ac_key_clicked", ac_key_clicked);
+    use_array_create_signal("ac_key_long", ac_key_long);
+    use_array_create_signal("dc_key_clicked", dc_key_clicked);
+    use_array_create_signal("usb_key_clicked", usb_key_clicked);
+    use_array_create_signal("eco_key_clicked", eco_key_clicked);
+    use_array_create_signal("ac_eco_long", ac_eco_long);
 }
 
 void key_press_gen_task(void)
