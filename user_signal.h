@@ -36,7 +36,11 @@ typedef struct
         usig usb_charger_over_temp;
     }usb_charger_signal;
     
-
+    struct
+    {
+        usig anykey_is_pressed;
+    }key_signal;
+    
 
     
     
@@ -45,7 +49,7 @@ typedef struct
 
 extern user_signal_t signal_type;
 
-typedef user_signal_t* usig_addr_t;
+typedef void* usig_addr_t;
 #define SIGNAL_OFFSET(pparent, pmember) ((pmember) - (pparent))
 typedef struct
 {

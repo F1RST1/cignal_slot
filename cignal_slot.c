@@ -276,6 +276,20 @@ static int use_llist_find_signal_by_fn(asignal_caller_t caller, int* if_found)
     return 0;
 }
 
+static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, int* if_found)
+{
+    *if_found = 0;
+    for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
+    {
+        signal_node_t* psignal = signal_llist + i;
+        if (psignal->signal_id.base == base && psignal->signal_id.offset == offset)
+        {
+            *if_found = 1;
+            return i;
+        }
+    }
+    return 0;
+}
 
 
 slot_node_t create_slot_node(aslot_callback_t callback)
