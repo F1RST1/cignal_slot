@@ -194,6 +194,36 @@ signal_node_t *use_llist_create_signal(const char *signal_name, usig_addr_t base
     return NULL;
 }
 
+static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, int* if_found);
+signal_node_t *use_llist_create_signal_noname(usig_addr_t base, usig_addr_t offset, asignal_caller_t caller)
+{
+    int if_found = 0;
+    int idx = use_llist_find_signal_by_addr(base, offset, &if_found);
+    if (if_found)
+    {
+        signal_node_t* psignal = signal_llist + idx;
+        psignal->caller = caller;
+        return psignal;
+    }
+
+    for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
+    {
+        if (signal_llist[i].signal_id.base != 0)
+        {
+            continue;
+        }
+
+        signal_llist[i].signal_name = NULL;
+        signal_llist[i].signal_id.base = base;
+        signal_llist[i].signal_id.offset = offset;
+        signal_llist[i].caller = caller;
+        signal_llist[i].slot_list = NULL;
+        return (signal_llist + i);
+    }
+    return NULL;
+    
+}
+
 void use_llist_connect_slot_to(const char *signal_name, usig_addr_t base, usig_addr_t offset, slot_node_t *slot_to_connect)
 {
     if (!slot_to_connect->callback)
@@ -241,6 +271,52 @@ void use_llist_connect_slot_to(const char *signal_name, usig_addr_t base, usig_a
     }
 }
 
+
+void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot_node_t *slot_to_connect)
+{
+    if (!slot_to_connect->callback)
+    {
+        return;
+    }
+
+    int if_found = 0;
+    int idx = use_llist_find_signal_by_addr(base, offset, &if_found);
+
+    signal_node_t* psignal = NULL;
+    if (!if_found)
+    {
+        psignal = use_llist_create_signal_noname(base, offset, NULL);
+        if (!psignal)
+        {
+            // array insufficient
+            return;
+        }
+    }
+    else
+    {
+        psignal = signal_llist + idx;
+    }
+
+    slot_to_connect->next = NULL;
+    if (psignal->slot_list == NULL)
+    {
+        psignal->slot_list = slot_to_connect;
+        return;
+    }
+
+    slot_node_t* pslot = psignal->slot_list;
+    while (1)
+    {
+        if (pslot->next != NULL)
+        {
+            pslot = pslot->next;
+            continue;
+        }
+
+        pslot->next = slot_to_connect;
+        return;
+    }
+}
 
 static int use_llist_find_signal_by_name(const char* signal_name, int* if_found)
 {
