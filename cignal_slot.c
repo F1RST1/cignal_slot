@@ -168,7 +168,7 @@ void use_llist_emit_signal(asignal_caller_t caller)
 
 
 static int use_llist_find_signal_by_name(const char* signal_name, int* if_found);
-signal_node_t* use_llist_create_signal(const char* signal_name, asignal_caller_t caller)
+signal_node_t *use_llist_create_signal(const char *signal_name, usig_addr_t base, usig_addr_t offset, asignal_caller_t caller)
 {
     int if_found = 0;
     int idx = use_llist_find_signal_by_name(signal_name, &if_found);
@@ -194,8 +194,7 @@ signal_node_t* use_llist_create_signal(const char* signal_name, asignal_caller_t
     return NULL;
 }
 
-
-void use_llist_connect_slot_to(const char* signal_name, slot_node_t* slot_to_connect)
+void use_llist_connect_slot_to(const char *signal_name, usig_addr_t base, usig_addr_t offset, slot_node_t *slot_to_connect)
 {
     if (!slot_to_connect->callback)
     {
@@ -209,7 +208,7 @@ void use_llist_connect_slot_to(const char* signal_name, slot_node_t* slot_to_con
     signal_node_t* psignal = NULL;
     if (!if_found)
     {
-        psignal = use_llist_create_signal(signal_name, NULL);
+        psignal = use_llist_create_signal(signal_name, 0, 0, NULL);
         if (!psignal)
         {
             // array insufficient
