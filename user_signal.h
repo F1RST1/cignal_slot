@@ -45,8 +45,13 @@ typedef struct
 
 extern user_signal_t signal_type;
 
-typedef unsigned int uoffset_t;
+typedef user_signal_t* usig_addr_t;
 #define SIGNAL_OFFSET(pparent, pmember) ((pmember) - (pparent))
+typedef struct
+{
+    usig_addr_t base;
+    usig_addr_t offset;
+}usig_id_t;
 
 
 #endif // !_USER_SIGNAL_H_

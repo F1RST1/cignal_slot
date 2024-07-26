@@ -2,6 +2,7 @@
 #define _CIGNAL_SLOT_TYPES_H_
 #include <stddef.h>
 #include "cignal_slot_def.h"
+#include "user_signal.h"
 
 // closure might be better
 typedef void(*aslot_callback_t)(unsigned char ignore, ...);
@@ -26,6 +27,7 @@ struct slot_node
 typedef struct
 {
     const char* signal_name;
+    usig_id_t signal_id;
     asignal_caller_t caller;  // 
     slot_node_t* slot_list;   // linked list
 }signal_node_t;
