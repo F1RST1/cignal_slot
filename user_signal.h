@@ -50,7 +50,6 @@ typedef struct
 extern user_signal_t signal_type;
 
 typedef void* usig_addr_t;
-#define SIGNAL_OFFSET(pparent, pmember) ((pmember) - (pparent))
 typedef struct
 {
     usig_addr_t base;

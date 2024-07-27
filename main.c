@@ -23,21 +23,21 @@ int main_2(int argc, char const *argv[])
     return 0;
 }
 
-int main_3(int argc, char const *argv[])
-{
-    use_llist_create_signal("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, __caller);
-    slot_node_t node = create_slot_node(callback_on_happened);
-    use_llist_connect_slot_to("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, &node);
+// int main_3(int argc, char const *argv[])
+// {
+//     use_llist_create_signal("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, __caller);
+//     slot_node_t node = create_slot_node(callback_on_happened);
+//     use_llist_connect_slot_to("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, &node);
 
-    slot_node_t node2 = create_slot_node(callback_on_happened);
-    use_llist_connect_slot_to("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, &node2);
-    use_llist_emit_signal(__caller);
+//     slot_node_t node2 = create_slot_node(callback_on_happened);
+//     use_llist_connect_slot_to("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, &node2);
+//     use_llist_emit_signal(__caller);
 
-    slot_node_t node3 = create_slot_node(callback_on_happened);
-    use_llist_connect_slot_to("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, &node3);
-    use_llist_emit_signal(__caller);
-    return 0;
-}
+//     slot_node_t node3 = create_slot_node(callback_on_happened);
+//     use_llist_connect_slot_to("mycaller", &signal_type, &signal_type.key_signal.anykey_is_pressed, &node3);
+//     use_llist_emit_signal(__caller);
+//     return 0;
+// }
 
 int main(int argc, char const *argv[])
 {
@@ -48,6 +48,10 @@ int main(int argc, char const *argv[])
 
     
     use_llist_create_signal_noname(&signal_type, &signal_type.key_signal.anykey_is_pressed, __caller);
+
+   
+    slot_node_t node2 = create_slot_node(callback_on_happened);
+    use_llist_safely_connect_slot_to(&signal_type, &signal_type.key_signal.anykey_is_pressed, &node2);
 
     use_llist_emit_signal(__caller);
 
