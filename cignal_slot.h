@@ -8,7 +8,8 @@ void use_array_connect_slot_to(const char *name, aslot_callback_t callback);
 
 signal_node_t *use_llist_create_signal_noname(usig_addr_t base, usig_addr_t offset, asignal_caller_t caller);
 void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot_node_t *slot_to_connect);
-void use_llist_emit_signal(asignal_caller_t caller);
+void use_llist_emit_signal_by_caller(asignal_caller_t caller);
+void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset);
 
 
 

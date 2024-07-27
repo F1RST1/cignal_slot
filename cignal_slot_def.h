@@ -2,7 +2,7 @@
 #define _CIGNAL_SLOT_DEF_H_
 
 #define USE_ARRAY
-// #define USE_LINKED_LIST
+#define USE_LINKED_LIST
 
 #define MAX_SIGNAL_COUNT 64
 

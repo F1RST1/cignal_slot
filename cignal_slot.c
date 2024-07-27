@@ -2,9 +2,8 @@
 #include <string.h>
 
 
+#ifdef USE_ARRAY
 sig_slots_t sig_slot_list[MAX_SIGNAL_COUNT] = {0};
-
-
 
 static int use_array_find_signal_by_fn(asignal_caller_t caller, int* if_found);
 void use_array_emit_signal(asignal_caller_t caller)
@@ -123,14 +122,15 @@ static int use_array_find_signal_by_fn(asignal_caller_t caller, int* if_found)
     }
     return 0;
 }
+#endif // USE_ARRAY
 
-#define USE_LINKED_LIST
 #ifdef USE_LINKED_LIST
 
 static signal_node_t signal_llist[MAX_SIGNAL_COUNT] = {0};
 
 static int use_llist_find_signal_by_fn(asignal_caller_t caller, int* if_found);
-void use_llist_emit_signal(asignal_caller_t caller)
+static void use_llist_emit_psignal(signal_node_t* psignal);
+void use_llist_emit_signal_by_caller(asignal_caller_t caller)
 {
     int if_found_caller = 0;
     int idx = 0;
@@ -142,32 +142,22 @@ void use_llist_emit_signal(asignal_caller_t caller)
         return;
     }
 
-    // iterate over the callback list
-    signal_node_t* psignal = signal_llist + idx;
-    if (!psignal->caller)
-    {
-        return;
-    }
-    slot_node_t* pslot = psignal->slot_list;
-    if (!pslot)
-    {
-        return;
-    }
-
-    while (1)
-    {
-        psignal->caller(pslot->callback);
-        pslot = pslot->next;
-        if (!pslot)
-        {
-            return;
-        }
-    }
-    
+    use_llist_emit_psignal(signal_llist + idx);    
 }
 
-
 static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, int* if_found);
+void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset)
+{
+    int if_found = 0;
+    int idx = use_llist_find_signal_by_addr(base, offset, &if_found);
+    if (!if_found)
+    {
+        return;
+    }
+
+    use_llist_emit_psignal(signal_llist + idx);    
+}
+
 signal_node_t *use_llist_create_signal_noname(usig_addr_t base, usig_addr_t offset, asignal_caller_t caller)
 {
     int if_found = 0;
@@ -186,7 +176,6 @@ signal_node_t *use_llist_create_signal_noname(usig_addr_t base, usig_addr_t offs
             continue;
         }
 
-        // signal_llist[i].signal_name = NULL;
         signal_llist[i].signal_id.base = base;
         signal_llist[i].signal_id.offset = offset;
         signal_llist[i].caller = caller;
@@ -275,6 +264,28 @@ static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, i
     return 0;
 }
 
+static void use_llist_emit_psignal(signal_node_t* psignal)
+{
+    if (!psignal->caller)
+    {
+        return;
+    }
+    slot_node_t* pslot = psignal->slot_list;
+    if (!pslot)
+    {
+        return;
+    }
+
+    while (1)
+    {
+        psignal->caller(pslot->callback);
+        pslot = pslot->next;
+        if (!pslot)
+        {
+            return;
+        }
+    }
+}
 
 slot_node_t create_slot_node(aslot_callback_t callback)
 {

@@ -1,45 +1,113 @@
 #ifndef _USER_SIGNAL_H_
 #define _USER_SIGNAL_H_
 
-// TODO use base&offset instead of string to identify signal 
-
 typedef unsigned char usig;
 
 typedef struct
 {
     struct
     {
-        usig battery_over_temp;
-        usig battery_under_temp;
-        usig battery_over_volt;
-        usig battery_under_volt;
-    }battery_signal;
+        usig over_volt;
+        usig under_volt;
+        usig request_fan;
+        struct
+        {
+            usig update_min_temp;
+            usig update_max_temp;
+        }temp;
+    }battery;
+
     
     struct
     {
-        usig usb_is_off;
-        usig usb_is_on;
-        usig usb_over_temp;
-    }usb_signal;
+        usig update_power;
+        usig over_current;
+    }usb_uni;
 
     struct
     {
-        usig dc_charger_is_out;
-        usig dc_charger_is_in;
-        usig dc_charger_over_temp;
-    }dc_charger_signal;
+        usig update_power;
+        usig over_current;
+    }dc;
 
     struct
     {
-        usig usb_charger_is_out;
-        usig usb_charger_is_in;
-        usig usb_charger_over_temp;
-    }usb_charger_signal;
+        usig update_power;
+        usig jsut_out;
+        usig just_in;
+        usig volt_ok;
+        struct
+        {
+            usig update_temp;
+        }temp;
+        usig request_fan;
+    }dc_charger;
+
+    struct
+    {
+        usig update_power;
+        usig just_out;
+        usig just_in;
+        struct
+        {
+            usig update_temp;
+        }temp;
+        usig request_fan;
+    }usb_bi;
+
+    struct
+    {
+        usig update_power;
+        usig went_off;
+        usig just_in;
+        usig just_out;
+        struct
+        {
+            usig update_temp;
+        }temp;
+        usig request_fan;
+    }inverter;
+
+    struct
+    {
+        usig update_power;
+        usig went_on;
+        usig went_off;
+        usig went_sos;
+    }flash_light;
+
+    struct
+    {
+        usig update_power;
+        usig went_on;
+        usig went_off;
+    }bar_light;
     
     struct
     {
-        usig anykey_is_pressed;
-    }key_signal;
+        usig any;
+        usig usb_clicked;
+        usig ac_clicked;
+        usig dc_clicked;
+        usig usb_long;
+        usig ac_long;
+        usig dc_long;
+    }key;
+    
+    struct
+    {
+        usig went_off;
+    }display;
+
+    // application
+    struct
+    {
+        usig developer_mode_on;
+        usig developer_mode_off;
+    }developer;
+    
+    
+    
     
 
     
