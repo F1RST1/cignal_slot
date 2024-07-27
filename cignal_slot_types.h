@@ -26,7 +26,6 @@ struct slot_node
 
 typedef struct
 {
-    // const char* signal_name;
     usig_id_t signal_id;
     asignal_caller_t caller;  // 
     slot_node_t* slot_list;   // linked list
