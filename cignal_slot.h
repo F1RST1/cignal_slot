@@ -11,6 +11,7 @@ void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot
 void use_llist_emit_signal_by_caller(asignal_caller_t caller);
 void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset);
 
+void use_llist_safely_connect_slot_array(signal_slot_connection_t* arr, size_t arrsize);
 
 
 slot_node_t create_slot_node(aslot_callback_t callback);

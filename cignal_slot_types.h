@@ -31,6 +31,14 @@ typedef struct
     slot_node_t* slot_list;   // linked list
 }signal_node_t;
 
+// for declarative style
+typedef struct
+{
+    usig_id_t signal_id;
+    slot_node_t slot_node;
+}signal_slot_connection_t;
+
+
 
 
 

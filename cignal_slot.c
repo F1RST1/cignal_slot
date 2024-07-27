@@ -215,6 +215,7 @@ void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot
     slot_to_connect->next = NULL;
     if (psignal->slot_list == NULL)
     {
+        // connect as first node
         psignal->slot_list = slot_to_connect;
         return;
     }
@@ -230,6 +231,16 @@ void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot
 
         pslot->next = slot_to_connect;
         return;
+    }
+}
+
+
+void use_llist_safely_connect_slot_array(signal_slot_connection_t* arr, size_t arrsize)
+{
+    for (size_t i = 0; i < arrsize; i++)
+    {
+        signal_slot_connection_t* pconn = arr + i;
+        use_llist_safely_connect_slot_to(pconn->signal_id.base, pconn->signal_id.offset, &pconn->slot_node);
     }
 }
 
@@ -278,6 +289,10 @@ static void use_llist_emit_psignal(signal_node_t* psignal)
 
     while (1)
     {
+        if (!pslot->callback)
+        {
+            continue;
+        }
         psignal->caller(pslot->callback);
         pslot = pslot->next;
         if (!pslot)
