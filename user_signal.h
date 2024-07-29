@@ -11,7 +11,7 @@ typedef struct
 {
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig over_volt;
         usig under_volt;
         usig request_fan;
@@ -24,58 +24,58 @@ typedef struct
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig over_current;
     } usb_uni;
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig over_current;
     } dc;
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig jsut_out;
         usig just_in;
         usig volt_ok;
         struct
         {
-            usig update_temp;
+            usig temp_updated;
         } temp;
         usig request_fan;
     } dc_charger;
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig just_out;
         usig just_in;
         struct
         {
-            usig update_temp;
+            usig temp_updated;
         } temp;
         usig request_fan;
     } usb_bi;
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig went_on;
         usig went_off;
         usig just_in;
         usig just_out;
         struct
         {
-            usig update_temp;
+            usig temp_updated;
         } temp;
         usig request_fan;
     } inverter;
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig went_on;
         usig went_off;
         usig went_sos;
@@ -83,24 +83,24 @@ typedef struct
 
     struct
     {
-        usig update_power;
+        usig power_updated;
         usig went_on;
         usig went_off;
     } bar_light;
 
     struct
     {
-        usig any;
         usig power_clicked;
-        usig usb_clicked;
         usig ac_clicked;
         usig dc_clicked;
         usig eco_clicked;
+        usig light_clicked;
         usig power_long;
-        usig usb_long;
         usig ac_long;
         usig dc_long;
         usig eco_long;
+        usig light_long;
+        usig ac_eco_long;
     } key;
 
     struct
@@ -118,13 +118,13 @@ typedef struct
 
     struct
     {
-        usig about_to_off;
+        usig about_to_go_off;
         usig is_on;
     } system_power_supply;
 
     struct
     {
-        usig update_power_all;
+        usig power_all_updated;
     } discharge;
 
     struct

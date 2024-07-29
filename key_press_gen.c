@@ -48,15 +48,17 @@ void ac_eco_long(aslot_callback_t callback)
 
 static void key_press_gen_initialize(void)
 {
-    use_array_create_signal("power_key_clicked", power_key_clicked);
-    use_array_create_signal("power_key_long", power_key_long);
-    use_array_create_signal("light_key_clicked", light_key_clicked);
-    use_array_create_signal("ac_key_clicked", ac_key_clicked);
-    use_array_create_signal("ac_key_long", ac_key_long);
-    use_array_create_signal("dc_key_clicked", dc_key_clicked);
-    use_array_create_signal("usb_key_clicked", usb_key_clicked);
-    use_array_create_signal("eco_key_clicked", eco_key_clicked);
-    use_array_create_signal("ac_eco_long", ac_eco_long);
+    signal_node_t signal_list[] =
+    {
+        {.signal_id = {.base = &signal_type, .offset = &signal_type.key.power_clicked}, .caller = power_key_clicked},
+        {.signal_id = {.base = &signal_type, .offset = &signal_type.key.light_clicked}, .caller = light_key_clicked},
+        {.signal_id = {.base = &signal_type, .offset = &signal_type.key.ac_clicked}, .caller = ac_key_clicked},
+        {.signal_id = {.base = &signal_type, .offset = &signal_type.key.dc_clicked}, .caller = dc_key_clicked},
+        {.signal_id = {.base = &signal_type, .offset = &signal_type.key.eco_clicked}, .caller = eco_key_clicked},
+        {.signal_id = {.base = &signal_type, .offset = &signal_type.key.ac_eco_long}, .caller = ac_eco_long},
+    };
+
+    use_llist_create_signal_array_noname(signal_list, sizeof(signal_list)/sizeof(*signal_list));
 }
 
 void key_press_gen_task(void)

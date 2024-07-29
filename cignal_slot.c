@@ -244,6 +244,14 @@ void use_llist_safely_connect_slot_array(signal_slot_connection_t* arr, size_t a
     }
 }
 
+void use_llist_create_signal_array_noname(signal_node_t* arr, size_t arrsize)
+{
+    for (size_t i = 0; i < arrsize; i++)
+    {
+        signal_node_t* psignal = arr + i;
+        use_llist_create_signal_noname(psignal->signal_id.base, psignal->signal_id.offset, psignal->caller);
+    }
+}
 
 static int use_llist_find_signal_by_fn(asignal_caller_t caller, int* if_found)
 {
