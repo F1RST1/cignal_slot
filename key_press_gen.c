@@ -58,7 +58,7 @@ static void key_press_gen_initialize(void)
         {.signal_id = {.base = &signal_type, .offset = &signal_type.key.ac_eco_long}, .caller = ac_eco_long},
     };
 
-    use_llist_create_signal_array_noname(signal_list, sizeof(signal_list)/sizeof(*signal_list));
+    use_llist_create_signal_array(signal_list, sizeof(signal_list)/sizeof(*signal_list));
 }
 
 void key_press_gen_task(void)

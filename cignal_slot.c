@@ -158,7 +158,7 @@ void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset)
     use_llist_emit_psignal(signal_llist + idx);    
 }
 
-signal_node_t *use_llist_create_signal_noname(usig_addr_t base, usig_addr_t offset, asignal_caller_t caller)
+signal_node_t *use_llist_create_signal(usig_addr_t base, usig_addr_t offset, asignal_caller_t caller)
 {
     int if_found = 0;
     int idx = use_llist_find_signal_by_addr(base, offset, &if_found);
@@ -186,8 +186,8 @@ signal_node_t *use_llist_create_signal_noname(usig_addr_t base, usig_addr_t offs
     
 }
 
-
-void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot_node_t *slot_to_connect)
+// pre-connect if signal was not created
+void use_llist_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot_node_t *slot_to_connect)
 {
     if (!slot_to_connect->callback)
     {
@@ -200,7 +200,7 @@ void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot
     signal_node_t* psignal = NULL;
     if (!if_found)
     {
-        psignal = use_llist_create_signal_noname(base, offset, NULL);
+        psignal = use_llist_create_signal(base, offset, NULL);
         if (!psignal)
         {
             // array insufficient
@@ -235,21 +235,21 @@ void use_llist_safely_connect_slot_to(usig_addr_t base, usig_addr_t offset, slot
 }
 
 
-void use_llist_safely_connect_slot_array(signal_slot_connection_t* arr, size_t arrsize)
+void use_llist_connect_slot_array(signal_slot_connection_t* arr, size_t arrsize)
 {
     for (size_t i = 0; i < arrsize; i++)
     {
         signal_slot_connection_t* pconn = arr + i;
-        use_llist_safely_connect_slot_to(pconn->signal_id.base, pconn->signal_id.offset, &pconn->slot_node);
+        use_llist_connect_slot_to(pconn->signal_id.base, pconn->signal_id.offset, &pconn->slot_node);
     }
 }
 
-void use_llist_create_signal_array_noname(signal_node_t* arr, size_t arrsize)
+void use_llist_create_signal_array(signal_node_t* arr, size_t arrsize)
 {
     for (size_t i = 0; i < arrsize; i++)
     {
         signal_node_t* psignal = arr + i;
-        use_llist_create_signal_noname(psignal->signal_id.base, psignal->signal_id.offset, psignal->caller);
+        use_llist_create_signal(psignal->signal_id.base, psignal->signal_id.offset, psignal->caller);
     }
 }
 

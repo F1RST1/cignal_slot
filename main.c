@@ -28,16 +28,15 @@ int main_2(int argc, char const *argv[])
 int main(int argc, char const *argv[])
 {
     // imperative style
-    // use_llist_create_signal_noname(&signal_type, &signal_type.key.power_clicked, __caller);
     static slot_node_t node;
     node = create_slot_node(callback_on_happened);
-    use_llist_safely_connect_slot_to(&signal_type, &signal_type.key.power_clicked, &node);
+    use_llist_connect_slot_to(&signal_type, &signal_type.key.power_clicked, &node);
 
-    use_llist_create_signal_noname(&signal_type, &signal_type.key.power_clicked, __caller);
+    use_llist_create_signal(&signal_type, &signal_type.key.power_clicked, __caller);
 
     static slot_node_t node2;
     node2 = create_slot_node(callback_on_happened);
-    use_llist_safely_connect_slot_to(&signal_type, &signal_type.key.power_clicked, &node2);
+    use_llist_connect_slot_to(&signal_type, &signal_type.key.power_clicked, &node2);
 
     use_llist_emit_signal_by_caller(__caller);
     use_llist_emit_signal_by_id(&signal_type, &signal_type.key.power_clicked);
@@ -51,7 +50,7 @@ int main(int argc, char const *argv[])
         {.signal_id = {.base = &signal_type, .offset = &signal_type.key.power_clicked}, .slot_node = {.callback = NULL}},
     };
 
-    use_llist_safely_connect_slot_array(conns, sizeof(conns)/ sizeof(*conns));
+    use_llist_connect_slot_array(conns, sizeof(conns)/ sizeof(*conns));
     use_llist_emit_signal_by_id(&signal_type, &signal_type.key.power_clicked);
 
     return 0;
