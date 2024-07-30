@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
 
 
     // declarative style
-    signal_slot_connection_t conns[] = 
+    static signal_slot_connection_t conns[] = 
     {
         {.signal_id = {.base = &signal_type, .offset = &signal_type.key.power_clicked}, .slot_node = {.callback = callback_on_happened}},
         {.signal_id = {.base = &signal_type, .offset = &signal_type.key.power_clicked}, .slot_node = {.callback = NULL}},

@@ -169,20 +169,16 @@ signal_node_t *use_llist_create_signal(usig_addr_t base, usig_addr_t offset, asi
         return psignal;
     }
 
-    for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
+    if (idx == MAX_SIGNAL_COUNT)
     {
-        if (signal_llist[i].signal_id.base != 0)
-        {
-            continue;
-        }
-
-        signal_llist[i].signal_id.base = base;
-        signal_llist[i].signal_id.offset = offset;
-        signal_llist[i].caller = caller;
-        signal_llist[i].slot_list = NULL;
-        return (signal_llist + i);
+        return NULL;
     }
-    return NULL;
+
+    signal_llist[idx].signal_id.base = base;
+    signal_llist[idx].signal_id.offset = offset;
+    signal_llist[idx].caller = caller;
+    signal_llist[idx].slot_list = NULL;
+    return (signal_llist + idx);
     
 }
 
@@ -268,19 +264,25 @@ static int use_llist_find_signal_by_fn(asignal_caller_t caller, int* if_found)
     return 0;
 }
 
+// return index if found, or first empty node if not found
 static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, int* if_found)
 {
     *if_found = 0;
+    int first_empty = MAX_SIGNAL_COUNT;
     for (size_t i = 0; i < MAX_SIGNAL_COUNT; i++)
     {
         signal_node_t* psignal = signal_llist + i;
+        if (psignal->signal_id.base == 0 && psignal->signal_id.offset == 0)
+        {
+            first_empty = (i < first_empty) ? i : first_empty;
+        }
         if (psignal->signal_id.base == base && psignal->signal_id.offset == offset)
         {
             *if_found = 1;
             return i;
         }
     }
-    return 0;
+    return first_empty;
 }
 
 static void use_llist_emit_psignal(signal_node_t* psignal)
