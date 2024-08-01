@@ -20,7 +20,7 @@ void use_llist_emit_signal_by_id_noctx(usig_addr_t base, usig_addr_t offset);
 
 // for declarative style
 void use_llist_connect_slot_array(signal_slot_connection_t* arr, size_t arrsize);
-void use_llist_create_signal_array(signal_node_t* arr, size_t arrsize);
+void use_llist_create_signal_from_array(signal_node_t* arr, size_t arrsize);
 
 
 slot_node_t create_slot_node(aslot_callback_t callback);

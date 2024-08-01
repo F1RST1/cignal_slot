@@ -7,6 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-Wpedantic",
+                "-std=c++2a",
                 "-fpermissive",
                 "-g",
                 "${fileDirname}/**.c",

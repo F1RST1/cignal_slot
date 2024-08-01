@@ -2,7 +2,7 @@
 #include "cignal_slot.h"
 #include "key_press_gen.h"
 
-void __caller(aslot_callback_t slot)
+void __caller(aslot_callback_t slot, void* context)
 {
     static int x = 99;
     static int x2= 50;

@@ -251,7 +251,7 @@ void use_llist_connect_slot_array(signal_slot_connection_t* arr, size_t arrsize)
     }
 }
 
-void use_llist_create_signal_array(signal_node_t* arr, size_t arrsize)
+void use_llist_create_signal_from_array(signal_node_t* arr, size_t arrsize)
 {
     for (size_t i = 0; i < arrsize; i++)
     {

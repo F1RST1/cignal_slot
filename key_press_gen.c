@@ -1,53 +1,54 @@
 #include "key_press_gen.h"
 #include "cignal_slot.h"
 
-void power_key_clicked(aslot_callback_t callback)
+void power_key_clicked(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void power_key_long(aslot_callback_t callback)
+void power_key_long(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void light_key_clicked(aslot_callback_t callback)
+void light_key_clicked(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void ac_key_clicked(aslot_callback_t callback)
+void ac_key_clicked(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void ac_key_long(aslot_callback_t callback)
+void ac_key_long(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void dc_key_clicked(aslot_callback_t callback)
+void dc_key_clicked(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void usb_key_clicked(aslot_callback_t callback)
+void usb_key_clicked(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void eco_key_clicked(aslot_callback_t callback)
+void eco_key_clicked(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
-void ac_eco_long(aslot_callback_t callback)
+void ac_eco_long(aslot_callback_t callback, void* context)
 {
     callback(0);
 }
 
 static void key_press_gen_initialize(void)
 {
+    // declarative style
     signal_node_t signal_list[] =
     {
         {.signal_id = {.base = &signal_type, .offset = &signal_type.key.power_clicked}, .caller = power_key_clicked},
@@ -58,7 +59,7 @@ static void key_press_gen_initialize(void)
         {.signal_id = {.base = &signal_type, .offset = &signal_type.key.ac_eco_long}, .caller = ac_eco_long},
     };
 
-    use_llist_create_signal_array(signal_list, sizeof(signal_list)/sizeof(*signal_list));
+    use_llist_create_signal_from_array(signal_list, sizeof(signal_list)/sizeof(*signal_list));
 }
 
 void key_press_gen_task(void)
