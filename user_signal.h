@@ -61,7 +61,8 @@ typedef struct
 
     struct
     {
-        usig power_updated;
+        usig power_in_updated; // for the bidirectional
+        usig power_out_updated;
         usig went_on;
         usig went_off;
         usig just_in;
@@ -112,8 +113,8 @@ typedef struct
     // application
     struct
     {
-        usig developer_mode_on;
-        usig developer_mode_off;
+        usig developer_mode_is_on;
+        usig developer_mode_is_off; // by default
     } developer;
 
     struct

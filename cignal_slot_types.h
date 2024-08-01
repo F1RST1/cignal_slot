@@ -6,7 +6,7 @@
 
 // closure might be better
 typedef void(*aslot_callback_t)(unsigned char ignore, ...);
-typedef void(*asignal_caller_t)(aslot_callback_t callback);
+typedef void(*asignal_caller_t)(aslot_callback_t callback, void* context);
 
 
 typedef struct

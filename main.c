@@ -20,7 +20,7 @@ int main_2(int argc, char const *argv[])
     use_array_create_signal("mycaller", __caller);
     use_array_connect_slot_to("mycaller", callback_on_happened);
 
-    use_array_emit_signal(__caller);
+    use_array_emit_signal_noctx(__caller);
     return 0;
 }
 
@@ -38,8 +38,8 @@ int main(int argc, char const *argv[])
     node2 = create_slot_node(callback_on_happened);
     use_llist_connect_slot_to(&signal_type, &signal_type.key.power_clicked, &node2);
 
-    use_llist_emit_signal_by_caller(__caller);
-    use_llist_emit_signal_by_id(&signal_type, &signal_type.key.power_clicked);
+    use_llist_emit_signal_by_caller_noctx(__caller);
+    use_llist_emit_signal_by_id_noctx(&signal_type, &signal_type.key.power_clicked);
 
 
 
@@ -51,7 +51,7 @@ int main(int argc, char const *argv[])
     };
 
     use_llist_connect_slot_array(conns, sizeof(conns)/ sizeof(*conns));
-    use_llist_emit_signal_by_id(&signal_type, &signal_type.key.power_clicked);
+    use_llist_emit_signal_by_id_noctx(&signal_type, &signal_type.key.power_clicked);
 
     return 0;
 }

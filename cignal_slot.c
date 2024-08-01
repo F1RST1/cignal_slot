@@ -6,7 +6,7 @@
 sig_slots_t sig_slot_list[MAX_SIGNAL_COUNT] = {0};
 
 static int use_array_find_signal_by_fn(asignal_caller_t caller, int* if_found);
-void use_array_emit_signal(asignal_caller_t caller)
+void use_array_emit_signal(asignal_caller_t caller, void* context)
 {
     // iterate over the list, and find the caller
     int if_found_caller;
@@ -27,10 +27,13 @@ void use_array_emit_signal(asignal_caller_t caller)
         {
             continue;
         }
-        sigslot->caller(sigslot->cblist[i]);
+        sigslot->caller(sigslot->cblist[i], context);
     }
 }
-
+void use_array_emit_signal_noctx(asignal_caller_t caller)
+{
+    use_array_emit_signal(caller, NULL);
+}
 
 static int use_array_find_signal_by_name(const char* signal_name, int* if_found);
 sig_slots_t* use_array_create_signal(const char* signal_name, asignal_caller_t caller)
@@ -129,8 +132,8 @@ static int use_array_find_signal_by_fn(asignal_caller_t caller, int* if_found)
 static signal_node_t signal_llist[MAX_SIGNAL_COUNT] = {0};
 
 static int use_llist_find_signal_by_fn(asignal_caller_t caller, int* if_found);
-static void use_llist_emit_psignal(signal_node_t* psignal);
-void use_llist_emit_signal_by_caller(asignal_caller_t caller)
+static void use_llist_emit_psignal(signal_node_t* psignal, void* context);
+void use_llist_emit_signal_by_caller(asignal_caller_t caller, void* context)
 {
     int if_found_caller = 0;
     int idx = 0;
@@ -142,11 +145,15 @@ void use_llist_emit_signal_by_caller(asignal_caller_t caller)
         return;
     }
 
-    use_llist_emit_psignal(signal_llist + idx);    
+    use_llist_emit_psignal(signal_llist + idx, context);    
+}
+void use_llist_emit_signal_by_caller_noctx(asignal_caller_t caller)
+{
+    use_llist_emit_signal_by_caller(caller, NULL);
 }
 
 static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, int* if_found);
-void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset)
+void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset, void* context)
 {
     int if_found = 0;
     int idx = use_llist_find_signal_by_addr(base, offset, &if_found);
@@ -155,7 +162,11 @@ void use_llist_emit_signal_by_id(usig_addr_t base, usig_addr_t offset)
         return;
     }
 
-    use_llist_emit_psignal(signal_llist + idx);    
+    use_llist_emit_psignal(signal_llist + idx, context);    
+}
+void use_llist_emit_signal_by_id_noctx(usig_addr_t base, usig_addr_t offset)
+{
+    use_llist_emit_signal_by_id(base, offset, NULL);
 }
 
 signal_node_t *use_llist_create_signal(usig_addr_t base, usig_addr_t offset, asignal_caller_t caller)
@@ -285,7 +296,7 @@ static int use_llist_find_signal_by_addr(usig_addr_t base, usig_addr_t offset, i
     return first_empty;
 }
 
-static void use_llist_emit_psignal(signal_node_t* psignal)
+static void use_llist_emit_psignal(signal_node_t* psignal, void* context)
 {
     if (!psignal->caller)
     {
@@ -303,7 +314,7 @@ static void use_llist_emit_psignal(signal_node_t* psignal)
         {
             continue;
         }
-        psignal->caller(pslot->callback);
+        psignal->caller(pslot->callback, context);
         pslot = pslot->next;
         if (!pslot)
         {
